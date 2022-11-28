@@ -1,0 +1,58 @@
+{
+  "name": "@encode42/node-extras",
+  "description": "Extra utilities and functionality for Node web applications.",
+  "version": "0.0.1",
+  "author": {
+    "name": "Encode42",
+    "email": "me@encode42.dev",
+    "url": "https://encode42.dev"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/Encode42"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Encode42/node-utils.git"
+  },
+  "license": "MIT",
+  "main": "dist/cjs.js",
+  "module": "dist/esm.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "yarn run build:base && yarn run build:bundle",
+    "build:base": "tsc --build",
+    "build:bundle": "rollup -c rollup.config.mjs",
+    "build:publish": "yarn run build && yarn publish",
+    "docs": "yarn run build && ynpx typedoc"
+  },
+  "files": [
+    "dist",
+    "changelog.md"
+  ],
+  "peerDependencies": {
+    "file-saver": ">=2",
+    "zod": ">=3"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^23.0.3",
+    "@rollup/plugin-json": "^5.0.2",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "esbuild": "^0.15.16",
+    "eslint": "^8.28.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-markdown": "^3.0.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-security": "^1.5.0",
+    "eslint-plugin-sonarjs": "^0.16.0",
+    "eslint-plugin-tsdoc": "^0.2.17",
+    "eslint-plugin-unicorn": "^45.0.0",
+    "rollup": "^3.5.0",
+    "rollup-plugin-dts": "^5.0.0",
+    "rollup-plugin-esbuild": "^5.0.0",
+    "rollup-plugin-node-externals": "^5.0.2",
+    "typedoc": "^0.23.21",
+    "typescript": "^4.9.3",
+    "ynpx": "^2.1.6"
+  }
+}

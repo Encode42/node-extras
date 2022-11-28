@@ -1,5 +1,5 @@
 import { safeJSON } from "./safeJSON";
-import { SafeParseReturnType, SafeParseSuccess, ZodType } from "zod";
+import { SafeParseReturnType, SafeParseSuccess, ZodParsedType, ZodType } from "zod";
 
 /**
  * Full return result for the {@link validateForm} function.
@@ -8,8 +8,15 @@ export type validateFormResultFullReturn<T> = SafeParseReturnType<T, T> & {
     "formData": FormData
 }
 
-export async function validateForm<T extends ZodType,>(request: Request, schema: T, fullReturn: false): Promise<SafeParseSuccess<T>>
-export async function validateForm<T extends ZodType,>(request: Request, schema: T, fullReturn: true): Promise<validateFormResultFullReturn<T>>
+/**
+ * @return The validated [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData)
+ */
+export async function validateForm(request: Request, schema: ZodType, fullReturn: false)
+
+/**
+ * @return The full [Zod](https://github.com/colinhacks/zod) object.
+ */
+export async function validateForm(request: Request, schema: ZodType, fullReturn: true)
 
 /**
  * Validate a request's [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) with a [Zod](https://github.com/colinhacks/zod) schema.
@@ -18,9 +25,8 @@ export async function validateForm<T extends ZodType,>(request: Request, schema:
  * [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) object passed into this function should have a `data` field which is stringified.
  *
  * @param request Request to validate
- * @param schema  [Zod](https://github.com/colinhacks/zod) schema to validate with
+ * @param schema [Zod](https://github.com/colinhacks/zod) schema to validate with
  * @param fullReturn Whether to return the full result from Zod's validation.
- * @return Either the validated [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) or empty object
  * @example
  * > `/app/routes/index.tsx`
  * ```ts
@@ -35,14 +41,7 @@ export async function validateForm<T extends ZodType,>(request: Request, schema:
  * });
  *
  * export async function action({ request }: RouteRequest) {
- *     const validation = await validateForm(request, IndexSubmission);
- *     if (!validation.success) {
- *         return json({
- *             "errors": validation.errors
- *         }, {
- *             "status": 400
- *         });
- *     }
+ *     const validation = await validateForm(request, IndexSubmission, false);
  *
  *     console.log(validation.data.id);
  * }
@@ -66,16 +65,17 @@ export async function validateForm<T extends ZodType,>(request: Request, schema:
  * }
  * ```
  */
-export async function validateForm<T extends ZodType,>(request: Request, schema: T, fullReturn?: boolean): Promise<SafeParseSuccess<T> | validateFormResultFullReturn<T>> {
+export async function validateForm(request: Request, schema: ZodType, fullReturn = true) {
     const formData = await request.formData();
-    const parsed = schema.safeParse(safeJSON(formData.get("data")));
+    const data = safeJSON(formData.get("data"));
+    const parsed = schema.safeParse(data);
 
     if (fullReturn) {
         return {
             ...parsed,
             formData
-        };
+        } as validateFormResultFullReturn<typeof data>;
     }
 
-    return parsed.success ? parsed.data : undefined;
+    return parsed.success ? parsed.data as SafeParseSuccess<typeof data>["data"] : undefined;
 }

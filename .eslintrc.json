@@ -87,19 +87,13 @@
         "unicorn/prefer-query-selector": "off",
         "unicorn/prefer-ternary": "warn",
         "unicorn/prevent-abbreviations": "off",
-        "unicorn/no-static-only-class": "off",
-        "@typescript-eslint/ban-ts-comment": "off",
-        "@typescript-eslint/no-extra-semi": "off",
-        "@typescript-eslint/no-explicit-any": "off"
+        "unicorn/no-static-only-class": "off"
     },
     "settings": {
         "import/parsers": {
             "@typescript-eslint/parser": [".ts"]
         },
         "import/resolver": {
-            "typescript": {
-
-            },
             "node": {
                 "extensions": [".js", ".ts"]
             }

@@ -1,7 +1,7 @@
 {
   "name": "@encode42/node-extras",
   "description": "Extra utilities and functionality for Node web applications.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": {
     "name": "Encode42",
     "email": "me@encode42.dev",
@@ -16,18 +16,22 @@
     "url": "https://github.com/Encode42/node-utils.git"
   },
   "license": "MIT",
-  "main": "dist/cjs.js",
-  "module": "dist/esm.js",
-  "types": "dist/index.d.ts",
+  "sideEffects": false,
+  "main": "cjs/index.js",
+  "module": "esm/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
+    "clean": "del ./lib/** && del ./cjs/** && del ./esm/**",
     "build": "pnpm run build:base && pnpm run build:bundle",
-    "build:base": "tsc --build",
+    "build:base": "tsc --build --force",
     "build:bundle": "rollup -c rollup.config.mjs",
-    "build:publish": "pnpm run build && pnpm publish",
-    "docs": "pnpm run build && pnpm exec typedoc"
+    "build:publish": "pnpm run clean && pnpm run build && pnpm publish",
+    "docs": "pnpm exec typedoc"
   },
   "files": [
-    "dist",
+    "lib",
+    "cjs",
+    "esm",
     "changelog.md"
   ],
   "dependencies": {
@@ -38,6 +42,7 @@
     "@rollup/plugin-commonjs": "^23.0.3",
     "@rollup/plugin-json": "^5.0.2",
     "@rollup/plugin-node-resolve": "^15.0.1",
+    "del-cli": "^5.0.0",
     "esbuild": "^0.15.16",
     "eslint": "^8.28.0",
     "eslint-plugin-import": "^2.26.0",
@@ -48,7 +53,6 @@
     "eslint-plugin-tsdoc": "^0.2.17",
     "eslint-plugin-unicorn": "^45.0.0",
     "rollup": "^3.5.0",
-    "rollup-plugin-dts": "^5.0.0",
     "rollup-plugin-esbuild": "^5.0.0",
     "rollup-plugin-node-externals": "^5.0.2",
     "typedoc": "^0.23.21",

@@ -10,7 +10,8 @@ export function safeJSON<T,>(value: T): any | T {
     let result: any;
 
     try {
-        result = JSON.parse(JSON.stringify(value));
+        // @ts-ignore // TODO
+        result = JSON.parse(value);
     } catch {
         return value;
     }
